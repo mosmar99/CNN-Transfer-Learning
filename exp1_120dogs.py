@@ -56,20 +56,17 @@ def main():
     ds_train = ds_train.map(normalize_img).cache().prefetch(tf.data.AUTOTUNE)
     ds_test = ds_test.map(normalize_img).cache().prefetch(tf.data.AUTOTUNE)
 
-    # Load saved model and modify output layer
     model = tf.keras.models.load_model('model_weights.h5')
     model.layers.pop()
     new_output = tf.keras.layers.Dense(1, activation='sigmoid')(model.layers[-1].output)
     model = tf.keras.Model(inputs=model.input, outputs=new_output)
 
-    # Compile model
     model.compile(
         optimizer=tf.keras.optimizers.Adam(0.0001),
         loss=tf.keras.losses.BinaryCrossentropy(from_logits=False),
         metrics=[tf.keras.metrics.BinaryAccuracy(name="acc")],
     )
 
-    # Train model
     model.fit(
         ds_train,
         epochs=50,

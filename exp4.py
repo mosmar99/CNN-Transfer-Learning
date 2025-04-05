@@ -32,7 +32,7 @@ def main(log_dir, epochs):
     base_model = tf.keras.models.load_model('./ass1/log_1003/model_weights.h5')
 
     # Reset specific layer weights
-    for layer_index in [27, 32]:  # Indices of conv2d, separable_conv2d, separable_conv2d_1
+    for layer_index in [27, 32]:  
         reset_layer_weights(base_model.layers[layer_index])
 
     x = base_model.layers[-1].input  
